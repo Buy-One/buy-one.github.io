@@ -1,0 +1,198 @@
+<!-- Converted from Lua and coded by Gemini -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duplicate Line Finder</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #c2d9f0;
+            --card: #f1f5f9;
+            --text: #334155;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        h1 {
+			  margin-top: 0;
+			  margin-bottom: 2rem;
+			  color: var(--primary);
+			  font-size: 1.5rem;
+			  text-align: center;
+		  }
+
+		  .grid {
+				 display: grid;
+				 grid-template-columns: 1fr;
+				 gap: 0.5rem; /* Original gap between grid items */
+			}
+
+        /* Control Header Styling */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+			label {
+				 display: block;
+				 font-weight: 600;
+				 margin-bottom: 0.5rem; /* Original label spacing */
+				 font-size: 1.2rem; /* Original label size */
+			}
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .btn-container {
+			  text-align: center;
+			  padding: 1rem 0;
+		  }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+				background: #1d4ed8;
+		  }
+
+        .stats {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Duplicate Line Finder</h1>
+    <div class="grid">
+        <div>
+            <div class="controls">
+                <label for="input">Input Text</label>
+                <label class="switch-container">
+                    <input type="checkbox" id="ignoreCase" checked> Ignore letter case
+                </label>
+            </div>
+            <textarea id="input" placeholder="Paste your text here..."></textarea>
+        </div>
+
+        <div class="btn-container">
+            <button onclick="findDuplicates()">Find Duplicates</button>
+        </div>
+
+        <div>
+            <label for="output">Duplicate Lines Found</label>
+            <textarea id="output" readonly placeholder="Duplicate lines will appear here..."></textarea>
+            <div id="stats" class="stats"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+/*
+local IGNORE_CASE = ""
+local lines_t, dupes_t = {}, {}
+
+	for line in text:gmatch('[^\n\r]+') do
+		if line then
+		line = IGNORE_CASE:match('%S') and line:lower() or line
+			if not lines_t[line] then
+			lines_t[line] = ''
+			else
+			table.insert(dupes_t, line)
+			end
+		end
+	end
+
+local display = table.concat(dupes_t,'\n')
+*/
+
+    function findDuplicates() {
+        const text = document.getElementById('input').value;
+        const ignoreCase = document.getElementById('ignoreCase').checked;
+
+        // Lua: local lines_t, dupes_t = {}, {}
+        const lines_t = {};
+        const dupes_t = [];
+
+        // Split text by newlines
+		  // Lua: gmatch('[^\n\r]+')
+        const lines = text.split(/\r?\n/);
+
+        lines.forEach(function(line) {
+				// Remove potential leading/trailing whitespace but keep original for display
+            const cleanLine = line.trim();
+
+            if (cleanLine !== "") {
+                // Determine processing key based on the toggle
+                // line = IGNORE_CASE:match('%S') and line:lower() or line
+                const processingKey = ignoreCase ? cleanLine.toLowerCase() : cleanLine;
+
+                // Check if key exists in tracker
+					 // Lua: if not lines_t[line]
+                if (!lines_t[processingKey]) {
+                    lines_t[processingKey] = true;
+                } else {
+                    // It's a duplicate
+						  // Lua: table.insert(dupes_t, line)
+                    dupes_t.push(line);
+                }
+            }
+        });
+
+        // Output result
+		  // Lua: table.concat(dupes_t, '\n')
+        document.getElementById('output').value = dupes_t.join('\n');
+
+        // UI Feedback, update stats
+        document.getElementById('stats').innerText = "Duplicates found: " + dupes_t.length;
+    }
+</script>
+
+</body>
+</html>
