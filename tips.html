@@ -6709,5 +6709,31 @@ https://forum.cockos.com/showpost.php?p=2965745
 
 =============================================================
 
+-- Make VKB highlight notes triggered by MIDI items on specific tracks
+
+
+1.In Preferences -> Audio -> Device set number of channels for Virtual loopback audio hardware channels
+2. In Preferences -> Audio -> MIDI Input enable REAPER Loopback X channel for Input
+3. In Preferences -> Audio -> MIDI Output enable REAPER Loopback X channel for Output
+4. In the routing dialogue of the parent track of the MIDI item whose notes you'd like to see highlighted in the VKB
+under MIDI hardware output select REAPER Loopback X as output
+5. Create a new track
+6. In its Input: MIDI menu select the same REAPER Loopback X channel as input source
+7. Record arm this new track
+8. Open the VKB and enable playback
+
+https://forum.cockos.com/showpost.php?p=2963382
+
+The method applies to REAPER v7 where Loopback is an official functionality accessible from the Preferences
+
+Regarding rhe methid of enabling it in earlier builds search this document for 'rearoute_loopback'
+
+In some themes the highlight color of VKB keys may be too pale, for some alternaitves refer to
+
+https://forum.cockos.com/showpost.php?p=2965187
+https://forum.cockos.com/showpost.php?p=2963362
+
+=============================================================
+
 </pre>
 </html>
