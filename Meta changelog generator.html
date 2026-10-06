@@ -242,7 +242,7 @@
         const new_features = ['add', 'implement', 'support'];
         const improvements = ['adjust', 'avoid', 'better', 'better support', 'clarify', 'clearer', 'consistent', 'constrain', 'correct', 'decrease', 'detect', 'disambiguate', 'do not', 'don\'t', 'document', 'enforce', 'ensure', 'to ensure', 'exclude', 'faster', 'follow', 'for better', 'for clarity', 'for compatibility', 'for consistency', 'handle', 'ignore', 'improve', 'improvement', 'limit', 'keep', 'make sure', 'minimize', 'more similarly', 'notify', 'only affect', 'only if', 'only try', 'omit', 'optimize', 'organize', 'permissive', 'preserve', 'prevent', 'to prevent', 'prompt', 'properly', 'rather than', 'reasonable', 'redraw', 'reduce', 'refresh', 'remove', 'to improve', 'resolve', 'respect', 'retain', 'reword', 're-word', 'save', 'separate', 'simplify', 'smoother', 'to match', 'tweak', 'warn', 'will not', 'work around', 'workaround'];
         const enhancements = ['account for', 'accept', 'allow', 'also work', 'also prompt', 'also affect', 'always allow', 'apply', 'automatically', 'auto-detect', 'can request', 'disable', 'display', 'enable', 'enhance', 'even if', 'even when', 'expose', 'extend', 'indicate', 'include', 'increase', 'inform ', 'obey', 'optionally', 'permit', 'provide', 'remember', 'request', 'respond', 'show', 'update', 'use'];
-        const regressions = ['regression', 'restore'];
+        const regressions = ['regression', 'restore', 'revert'];
 
         // --- Helper Functions ---
 
@@ -273,11 +273,13 @@
                 const escV = esc(v);
                 const regRegression = (v === 'regression' && s.includes('regression')); // these keywords may appear anywhere in the line
                 const regRather = (v === 'rather than' && s.includes('rather than')); // these keywords may appear anywhere in the line
-                const regMid = (['can request', 'fixes', 'correct', 'ensure', 'ignore', 'will not'].includes(v) && new RegExp(' ' + escV + '[^a-zA-Z0-9]').test(s)); // in the middle of the description, the leading space prevents 'incorrect' being a valid capture // ensuring that declensions of 'correct' and 'ensure' are ignored
+                const regMid = (['can request', 'fixes', 'correct', 'ensure', 'ignore', 'will not'].includes(v) 
+					 && new RegExp(' ' + escV + '[^a-zA-Z0-9]').test(s)); // in the middle of the description, the leading space prevents 'incorrect' being a valid capture // ensuring that declensions of 'correct' and 'ensure' are ignored
 					 
 					 const regMidEnd = (['fixes', 'do not', "don't", 'reasonable', 'work around', 'respect', 'support'].includes(v) || v.startsWith('for ')) && new RegExp(' ' + escV + '\\s*').test(s) 
 					 && !new RegExp('to ' + escV + '\\s*').test(s); // -- these may appear either in the middle of the change description or at the end
 					 
+					 const regRevert = (v === 'revert') && s.includes('revert') && new RegExp('to [\\d.]+').test(s)
                 const regStart = (v === 'add' && s.startsWith(v)); // 'add' is only valid when appears at the top of the change description to ignore 'to add' colocation in the middle of it
                 const regStartOther = (new RegExp('^' + escV + '[^a-zA-Z0-9]').test(s)); // other keywords appear at the top of the line // ensuring that declensions are ignored
                 const regThirdPerson = (new RegExp(' ' + escV + 's').test(s)) && v !== 'handle'; // keyword in 3d person in the middle of the change description
@@ -285,7 +287,7 @@
                 const regFuture = (new RegExp('will ' + escV).test(s)); // the key word is in future tense in the middle of the line
                 const regOptionally = (v === 'optionally' && s.includes(v)); // optionally can appear in the middle of a sentence
 
-                if (regRegression || regRather || regMid || regMidEnd || regStart  || regStartOther || regThirdPerson || regSecondClause || regFuture || regOptionally) {
+                if (regRegression || regRather || regMid || regMidEnd || regStart || regRevert || regStartOther || regThirdPerson || regSecondClause || regFuture || regOptionally) {
                     return true;
                 }
             }
@@ -375,7 +377,7 @@
                         else if (cat === 'New features') isValid = validateCat(changeDescRaw, new_features);
                         else if (cat === 'Improvements') isValid = validateCat(changeDescRaw, improvements) && !validateCat(changeDescRaw, bug_fixes);
                         else if (cat === 'Enhancements') isValid = validateCat(changeDescRaw, enhancements);
-                        else if (cat === 'Regressions') isValid = validateCat(changeDescRaw, ['regression']);
+                        else if (cat === 'Regressions') isValid = validateCat(changeDescRaw, regressions);
                         else if (cat === 'Other') {
                             const allKeywords = [...bug_fixes, ...new_features, ...improvements, ...enhancements, ...regressions];
                             isValid = validateCat(changeDescRaw, allKeywords) === null;
