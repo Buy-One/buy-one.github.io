@@ -6756,5 +6756,38 @@ https://forum.cockos.com/showpost.php?p=2968172
 
 =============================================================
 
+-- What compressor delta signal is?
+
+
+It's the same as the signal produced by running two copies of an audio source in parallel, 
+one compressed and another not but with polarity flipped in the uncompressed source
+
+
+=============================================================
+
+-- Ways to record project output
+
+
+1. Create a new track, right click the 'Record Arm' button, set it to 'Record output' and 'Monitor Input'.
+Then disable 'Master send' on this track because with input monitoring being On feedback will be caused otherwise.
+
+2. Using virtual loopback channels
+
+A. Enable one or more loopback channels at
+Preferences -> Audio -> Virtual loopback audio hardware channels
+B. Send the Master track output to one of these channels via the routing dialogue
+C. Set the recording track to:
+Record: input (audio or MIDI)
+Input: Mono (or Stereo) -> Loopback Input -> (select the same channel as the one the Master track output is routed to)
+Turn input monitoring off to prevent feedback.
+
+3. Use another open project to record the output of the source project into, either empty or, if not empty, 
+one where all other tracks which are going to be lined up with the recorded material are muted, otherwise they 
+will be recorded as well. 
+No special settings are required other than having 'Run background projects' option enabled in the project tab menu. 
+The track must record input as normal.
+
+=============================================================
+	
 
 </html>
