@@ -279,7 +279,7 @@
 					 const regMidEnd = (['fixes', 'do not', "don't", 'reasonable', 'work around', 'respect', 'support'].includes(v) || v.startsWith('for ')) && new RegExp(' ' + escV + '\\s*').test(s) 
 					 && !new RegExp('to ' + escV + '\\s*').test(s); // -- these may appear either in the middle of the change description or at the end
 					 
-					 const regRevert = (v === 'revert') && s.includes('revert') && new RegExp('to [\\d.]+').test(s)
+				const regRevert = (v === 'revert') && s.includes('revert') && new RegExp('to [\\d.]+').test(s)
                 const regStart = (v === 'add' && s.startsWith(v)); // 'add' is only valid when appears at the top of the change description to ignore 'to add' colocation in the middle of it
                 const regStartOther = (new RegExp('^' + escV + '[^a-zA-Z0-9]').test(s)); // other keywords appear at the top of the line // ensuring that declensions are ignored
                 const regThirdPerson = (new RegExp(' ' + escV + 's').test(s)) && v !== 'handle'; // keyword in 3d person in the middle of the change description
