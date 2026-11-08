@@ -6788,6 +6788,41 @@ No special settings are required other than having 'Run background projects' opt
 The track must record input as normal.
 
 =============================================================
-	
 
+-- reaconsole_customcommands.txt
+
+
+An SWS configuration file pre-introduction of Cycle actions, still supportedm
+must reside in REAPER resource path
+
+Suports ReaConsole syntax, see 
+https://standingwaterstudios.com/reaconsole.php
+
+Each command must reside on a separate line, e.g.:
+
+S*DRUM*
+S*BASS*
+S*CHORD*
+S*REVERB*
+S*DELAY*
+S*INSTR*
+
+
+Each ofthose commands instruct ReaConsole to select track containing in its name the part
+enclosed within the asterisks.
+
+Also
+
++O
++m
+
+Solo selected tracks
+Mute selected tracks
+
+These commands are automatically pulled up by the Action list as separate actions which can be
+executed like built-in actions
+
+=============================================================
+
+</pre>
 </html>
