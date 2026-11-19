@@ -295,15 +295,28 @@
         }
 
         function collectThreads(changeDesc) {
-            // Regex for [t=123], [p=123], [rr=123]
+         // Regex for [t=123], [p=123], [r=123], [rr=123]
             const threadRegex = /\[[tpr]+=\w+\]/g;
             return changeDesc.replace(threadRegex, (match) => {
-                const isReddit = match.includes('rr=');
+                const isReddit = match.includes('r=') || match.includes('rr=');
                 const baseUrl = isReddit ? 'https://www.reddit.com/r/Reaper/comments/' : 'https://forum.cockos.com/showthread.php?';
-                const id = isReddit ? match.match(/rr=(.+)/)[1].replace(']', '') : match.substring(1).replace(']', '');
+                const id = isReddit ? match.match(/r+=(.+)/)[1].replace(']', '') : match.substring(1).replace(']', '');
                 return `[url=${baseUrl}${id}]${match}[/url]`;
             });
         }
+		  
+		 // OR
+		 /*
+			function collectThreads(changeDesc) {
+				// Match [t=123], [p=123], [r=123], and [rr=123]
+				const threadRegex = /\[(t|p|r|rr)=(\w+)\]/g;
+				return changeDesc.replace(threadRegex, (match, type, id) => {
+				  const isReddit = type === 'rr' || type === 'r';
+				  const baseUrl = isReddit ? 'https://www.reddit.com/r/Reaper/comments/' : 'https://forum.cockos.com/showthread.php?';
+				  return `[url=${baseUrl}${id}]${match}[/url]`;
+				});
+			}
+		 */ 
 
         function returnCategory(catName, dataArray) {
             if (dataArray.length === 0) return "";
